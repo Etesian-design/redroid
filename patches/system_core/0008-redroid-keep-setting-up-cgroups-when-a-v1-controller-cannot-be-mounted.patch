@@ -1,0 +1,30 @@
+From 5665bac5d6d3f860a92d4d2446dff934ca9cea9f Mon Sep 17 00:00:00 2001
+From: b <b@b>
+Date: Tue, 3 Nov 2026 18:22:23 +0000
+Subject: [PATCH] redroid: keep setting up cgroups when a v1 controller cannot
+ be mounted
+
+Change-Id: Ie9c310e8e098a76a35b79c77f6df2402d449bad6
+---
+ libprocessgroup/setup/cgroup_map_write.cpp | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/libprocessgroup/setup/cgroup_map_write.cpp b/libprocessgroup/setup/cgroup_map_write.cpp
+index 0b26e95..cba2690 100644
+--- a/libprocessgroup/setup/cgroup_map_write.cpp
++++ b/libprocessgroup/setup/cgroup_map_write.cpp
+@@ -290,8 +290,10 @@ bool CgroupSetup() {
+         }
+ 
+         if (!SetupCgroup(descriptor)) {
++            // redroid: a container cannot mount cgroup v1 controllers (blkio) on a v2-only host;
++            // carry on so the system/apps v2 hierarchy below still gets created.
+             LOG(ERROR) << "Failed to setup " << name << " cgroup";
+-            return false;
++            continue;
+         }
+     }
+ 
+-- 
+2.53.0
+

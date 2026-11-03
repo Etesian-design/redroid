@@ -1,0 +1,28 @@
+From de08d987a28f3ac39c6b62c6f2a5f0aaecfd3be0 Mon Sep 17 00:00:00 2001
+From: b <b@b>
+Date: Tue, 3 Nov 2026 18:11:34 +0000
+Subject: [PATCH] redroid: never write the host sysrq trigger
+
+Change-Id: I06cad28dcb232dc2ae87f6cb4bfad21afe93a5a6
+---
+ init/reboot_utils.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/init/reboot_utils.h b/init/reboot_utils.h
+index 09e87ef..33ea984 100644
+--- a/init/reboot_utils.h
++++ b/init/reboot_utils.h
+@@ -19,7 +19,9 @@
+ #include <optional>
+ #include <string>
+ 
+-#define PROC_SYSRQ "/proc/sysrq-trigger"
++// redroid: a privileged container shares the host kernel; sysrq here would signal, remount or
++// crash the whole host (2026-11-03: shutdown sent SIGTERM to every host process).
++#define PROC_SYSRQ "/dev/null"
+ 
+ namespace android {
+ namespace init {
+-- 
+2.53.0
+
