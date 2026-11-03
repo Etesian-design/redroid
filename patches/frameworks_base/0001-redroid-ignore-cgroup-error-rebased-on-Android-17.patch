@@ -1,0 +1,23 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: builder <builder@localhost>
+Date: Tue, 3 Nov 2026 12:47:38 +0000
+Subject: [PATCH] redroid: ignore cgroup error (rebased on Android 17)
+
+Change-Id: I4c3e7922211cf49e0a6ada17b83034bb34ab8ebb
+---
+ services/core/java/com/android/server/am/ProcessList.java | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/services/core/java/com/android/server/am/ProcessList.java b/services/core/java/com/android/server/am/ProcessList.java
+index d8e2cfaae..4e8215756 100644
+--- a/services/core/java/com/android/server/am/ProcessList.java
++++ b/services/core/java/com/android/server/am/ProcessList.java
+@@ -2694,7 +2694,7 @@ public final class ProcessList extends ProcessListInternal
+                             if (res == -OsConstants.ESRCH) {
+                                 Slog.e(ActivityManagerService.TAG, errorStr);
+                             } else {
+-                                throw new AssertionError(errorStr);
++                                Slog.e(ActivityManagerService.TAG, errorStr); // redroid: the host owns the cgroups
+                             }
+                         } else {
+                             app.mProcessGroupCreated = true;

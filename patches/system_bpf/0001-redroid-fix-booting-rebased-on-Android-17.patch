@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: builder <builder@localhost>
+Date: Tue, 3 Nov 2026 12:16:19 +0000
+Subject: [PATCH] redroid: fix booting (rebased on Android 17)
+
+Change-Id: I239b48cd5650ac56c19c59c0fed8f48c087512bf
+---
+ loader/Loader.cpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/loader/Loader.cpp b/loader/Loader.cpp
+index 08c6b6d..8507703 100644
+--- a/loader/Loader.cpp
++++ b/loader/Loader.cpp
+@@ -601,9 +601,11 @@ void vendorBpfLoader() {
+         ALOGE("If this triggers reliably, you're probably missing kernel options or patches.");
+         ALOGE("If this triggers randomly, you might be hitting some memory allocation "
+               "problems or startup script race.");
++        #if 0 // redroid
+         ALOGE("--- DO NOT EXPECT SYSTEM TO BOOT SUCCESSFULLY ---");
+         sleep(20);
+         exit(121);
++        #endif
+     }
+ 
+     const char* args[] = {"/apex/com.android.tethering/bin/netbpfload", "done", NULL};

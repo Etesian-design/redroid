@@ -1,0 +1,34 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: builder <builder@localhost>
+Date: Tue, 3 Nov 2026 12:26:03 +0000
+Subject: [PATCH] Drop avcenc and vainfo: Android 17 builds its own
+ (external/libavc, external/libva-utils)
+
+---
+ Android.mk   | 2 +-
+ prebuilts.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Android.mk b/Android.mk
+index 667eea7..e081fc8 100644
+--- a/Android.mk
++++ b/Android.mk
+@@ -186,7 +186,7 @@ endef
+ 
+ # vaapi
+ ifeq (,$(filter $(PLATFORM_VERSION), 15 16))
+-bins:=avcenc h264encode hevcencode jpegenc vp8enc vp9enc vainfo
++bins:=h264encode hevcencode jpegenc vp8enc vp9enc
+ $(foreach i,$(bins),\
+     $(eval $(call define-redroid-prebuilt-bin,$(i),$(va_libs))))
+ endif
+diff --git a/prebuilts.mk b/prebuilts.mk
+index a137cdc..91e5b8c 100644
+--- a/prebuilts.mk
++++ b/prebuilts.mk
+@@ -17,4 +17,4 @@ PRODUCT_PACKAGES += \
+ 
+ 
+ # vaapi
+-PRODUCT_PACKAGES += avcenc h264encode hevcencode jpegenc vp8enc vp9enc vainfo
++PRODUCT_PACKAGES += h264encode hevcencode jpegenc vp8enc vp9enc

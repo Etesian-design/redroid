@@ -16,7 +16,7 @@ $(call inherit-product, device/redroid-prebuilts/prebuilts_x86.mk)
 $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 $(call inherit-product, vendor/etesian/etesian.mk)
 
-PRODUCT_NAME := etesian_redroid_x86_64
+PRODUCT_NAME := lineage_etesian_x86_64
 PRODUCT_DEVICE := redroid_x86_64_only
 PRODUCT_BRAND := Etesian
 PRODUCT_MANUFACTURER := Etesian
