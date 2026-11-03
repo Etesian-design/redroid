@@ -16,6 +16,20 @@ Status: a spike. Nothing here has booted yet.
 ## Host
 The `binder_linux` kernel module, loaded with `devices=binder,hwbinder,vndbinder` (the same as any Redroid).
 
+## Image and running it
+`make-image.sh <tree>` turns a finished build into `etesian-redroid:24.0`. Run it like Redroid, with the host's sysrq trigger
+covered:
+
+```
+docker run -d --privileged -v /dev/null:/proc/sysrq-trigger -v etesian-data:/data -p 127.0.0.1:5555:5555 \
+  etesian-redroid:24.0 androidboot.redroid_width=1080 androidboot.redroid_height=1920 androidboot.redroid_dpi=420 \
+  androidboot.use_memfd=1
+```
+
+A privileged container shares the host's kernel. Android's shutdown writes to `/proc/sysrq-trigger` (signal every process,
+remount read-only, crash), which would hit the whole host: on a test machine it once sent SIGTERM to sshd, Docker and every
+other container. The `system_core` patch 0007 points init away from it; the mount above is a second guard.
+
 ## Licences
 Redroid's parts are Apache-2.0; `device/redroid-prebuilts` holds Mesa and other open-source binaries. No Nokia files: the
 optional `vendor/harmattan-n9` is never part of this build.
