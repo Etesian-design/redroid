@@ -1,4 +1,4 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 8db890736cfa05521853ef77b0052fd8007909ea Mon Sep 17 00:00:00 2001
 From: builder <builder@localhost>
 Date: Tue, 3 Nov 2026 12:16:19 +0000
 Subject: [PATCH] redroid: fix booting (rebased on Android 17)
@@ -10,7 +10,7 @@ Change-Id: Idba49bcd2ab38341a8a9749ead5b39f1c8bac4bd
  2 files changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/bpf/loader/NetBpfLoad.cpp b/bpf/loader/NetBpfLoad.cpp
-index 7ba3247..67f9e44 100644
+index 7ba3247..6e3a24a 100644
 --- a/bpf/loader/NetBpfLoad.cpp
 +++ b/bpf/loader/NetBpfLoad.cpp
 @@ -1754,12 +1754,12 @@ static int doLoad(char** argv, char * const envp[]) {
@@ -18,13 +18,13 @@ index 7ba3247..67f9e44 100644
          // BPF_JIT is required by R VINTF (which means 4.14/4.19/5.4 kernels),
          // but 4.14/4.19 were released with P & Q, and only 5.4 is new in R+.
 -        if (!writeFile("/proc/sys/net/core/bpf_jit_enable", "1\n")) return 24;
-+        if (!writeFile(\"/proc/sys/net/core/bpf_jit_enable\", \"1\n\")) ALOGE(\"write 1 to /proc/sys/net/core/bpf_jit_enable FAILED\");  // redroid
++        if (!writeFile("/proc/sys/net/core/bpf_jit_enable", "1\n")) ALOGE("write 1 to /proc/sys/net/core/bpf_jit_enable FAILED");  // redroid
  
          // Enable JIT kallsyms export for privileged users only
          // (Note: this (open) will fail with ENOENT 'No such file or directory' if
          //  kernel does not have CONFIG_HAVE_EBPF_JIT=y)
 -        if (!writeFile("/proc/sys/net/core/bpf_jit_kallsyms", "1\n")) return 25;
-+        if (!writeFile(\"/proc/sys/net/core/bpf_jit_kallsyms\", \"1\n\")) ALOGE(\"write 1 to /proc/sys/net/core/bpf_jit_kallsyms FAILED\");  // redroid
++        if (!writeFile("/proc/sys/net/core/bpf_jit_kallsyms", "1\n")) ALOGE("write 1 to /proc/sys/net/core/bpf_jit_kallsyms FAILED");  // redroid
      }
  
      // Create all the pin subdirectories
@@ -53,3 +53,6 @@ index 70991eb..11b5721 100644
      if (fatal) abort();
  }
  
+-- 
+2.53.0
+
