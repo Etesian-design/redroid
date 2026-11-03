@@ -1,0 +1,44 @@
+From 33e351c7e5df76e0e30b1d607cfec6db3c21c4c1 Mon Sep 17 00:00:00 2001
+From: b <b@b>
+Date: Tue, 3 Nov 2026 23:12:53 +0000
+Subject: [PATCH] redroid: hide the host sysrq trigger and leave the sysrq
+ setting alone
+
+Change-Id: I33a129dc79316c43981dfc1681ee1702bb8593e5
+---
+ rootdir/init.rc | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/rootdir/init.rc b/rootdir/init.rc
+index 0b41da8..e28926f 100644
+--- a/rootdir/init.rc
++++ b/rootdir/init.rc
+@@ -18,8 +18,10 @@ on early-init
+     mkdir /dev/bootchart 0755 root root
+     bootchart start
+ 
+-    # Disable sysrq from keyboard
+-    write /proc/sys/kernel/sysrq 0
++    # redroid: /proc/sys/kernel/sysrq and /proc/sysrq-trigger belong to the host kernel. Never change the
++    # setting, and hide the trigger behind /dev/null in this container so nothing here (the system server's
++    # watchdog, llkd, init) can send sysrq to the host.
++    mount none /dev/null /proc/sysrq-trigger bind
+ 
+     # Android doesn't need kernel module autoloading, and it causes SELinux
+     # denials.  So disable it by setting modprobe to the empty string.  Note: to
+@@ -643,11 +645,9 @@ on post-fs
+     chown root log /proc/pagetypeinfo
+     chmod 0440 /proc/pagetypeinfo
+ 
+-    #change permissions on kmsg & sysrq-trigger so bugreports can grab kthread stacks
++    #change permissions on kmsg (redroid: not the host sysrq-trigger) so bugreports can grab kthread stacks
+     chown root system /proc/kmsg
+     chmod 0440 /proc/kmsg
+-    chown root system /proc/sysrq-trigger
+-    chmod 0220 /proc/sysrq-trigger
+     chown system log /proc/last_kmsg
+     chmod 0440 /proc/last_kmsg
+ 
+-- 
+2.53.0
+
