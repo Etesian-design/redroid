@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Local manifest for an Etesian LineageOS tree: the container (Redroid-style) device and its parts. -->
+<manifest>
+  <remote name="redroid" fetch="https://github.com/remote-android/" />
+  <project path="device/redroid" name="device_redroid" remote="redroid" revision="redroid-16.0.0" />
+  <project path="vendor/redroid" name="vendor_redroid" remote="redroid" revision="master" />
+  <project path="device/redroid-prebuilts" name="device_redroid-prebuilts" remote="redroid" revision="master" />
+  <project path="hardware/redroid/c2" name="redroid-c2" remote="redroid" revision="master" />
+  <project path="hardware/redroid/omx" name="redroid-omx" remote="redroid" revision="master" />
+</manifest>

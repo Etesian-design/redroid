@@ -1,0 +1,8 @@
+Etesian on Redroid
+Etesian, founded by Kyriakos Bompotis.
+
+Licensed under the GNU Affero General Public License, version 3 only (AGPL-3.0-only, LICENSE), with the additional
+terms in ADDITIONAL-TERMS.md (section 7(b) attribution, section 7(e) names and logos, the Phorepoc exception).
+
+Third-party parts under their own licences: Redroid's device trees and the AOSP projects the patches apply to (Apache-2.0);
+device/redroid-prebuilts holds Mesa and other open-source binaries under their licences. No Nokia files are included.
