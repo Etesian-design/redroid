@@ -1,0 +1,32 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: builder <builder@localhost>
+Date: Tue, 3 Nov 2026 12:16:09 +0000
+Subject: [PATCH] redroid: read the container init command line
+
+Change-Id: Ia0d048b23694fb2ce176a9cb2711eb13732d4c33
+---
+ libfstab/boot_config.cpp | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/libfstab/boot_config.cpp b/libfstab/boot_config.cpp
+index 8b4e583..33b7569 100644
+--- a/libfstab/boot_config.cpp
++++ b/libfstab/boot_config.cpp
+@@ -154,13 +154,15 @@ bool GetKernelCmdlineFromString(const std::string& cmdline, const std::string& k
+ 
+ void ImportKernelCmdline(const std::function<void(std::string, std::string)>& fn) {
+     std::string cmdline;
+-    android::base::ReadFileToString("/proc/cmdline", &cmdline);
++    android::base::ReadFileToString("/proc/self/cmdline", &cmdline); // HACKED
++    std::replace(cmdline.begin(), cmdline.end(), '\0', ' '); // HACKED
+     ImportKernelCmdlineFromString(android::base::Trim(cmdline), fn);
+ }
+ 
+ bool GetKernelCmdline(const std::string& key, std::string* out) {
+     std::string cmdline;
+-    android::base::ReadFileToString("/proc/cmdline", &cmdline);
++    android::base::ReadFileToString("/proc/self/cmdline", &cmdline); // HACKED
++    std::replace(cmdline.begin(), cmdline.end(), '\0', ' '); // HACKED
+     return GetKernelCmdlineFromString(android::base::Trim(cmdline), key, out);
+ }
+ 

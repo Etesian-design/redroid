@@ -8,7 +8,7 @@ Status: a spike. Nothing here has booted yet.
 
 ## Layout
 - `manifest/etesian-redroid.xml`: a local manifest that adds Redroid's container device to a LineageOS tree.
-- `device/`: the `etesian_redroid_x86_64` product (goes to `device/etesian/redroid`).
+- `device/`: the `lineage_etesian_x86_64` product (goes to `device/etesian/redroid`).
 - `patches/<project>/`: Redroid's changes to Android, rebased on the LineageOS version. They switch off SELinux and seccomp and
   let Android boot without a kernel of its own, so they belong only in a tree that builds the container, never in a phone build.
 - `builder/`: the build environment as a Docker image, so the build host needs only Docker.
