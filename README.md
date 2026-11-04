@@ -31,6 +31,13 @@ other container. Docker refuses mounts inside `/proc`, so the image guards itsel
 reboot code away from it, and patch 0009 hides it behind `/dev/null` at the top of `init.rc`, before anything else can write
 to it (the system server's watchdog and `llkd` also can), and leaves the host's sysrq setting alone.
 
+## Testing
+Boot test images only inside a throwaway VM, never on a real host. A privileged Android container shares the host
+kernel: failed boots on a test machine once signalled every host process (sysrq) and once shut down the host's root
+filesystem (`EXT4_IOC_SHUTDOWN` on `/data`). Patches 0007, 0009 and 0010 stop both, but a new image is untested until it
+has booted in the VM. `vm-test.sh` copies a finished build into the VM (`~/vm`, QEMU/KVM in an unprivileged container
+with only `/dev/kvm`), assembles the image there, boots it and prints the boot state and init's errors.
+
 ## Licences
 
 Etesian, founded by Kyriakos Bompotis. Licensed under the GNU Affero General Public License, version 3 only (AGPL-3.0-only, [LICENSE](LICENSE)), with additional terms under its section 7 ([ADDITIONAL-TERMS.md](ADDITIONAL-TERMS.md)): the attribution "Etesian, founded by Kyriakos Bompotis" must be kept, also where a work based on it shows legal notices; no rights are granted to the Etesian names and logos ([TRADEMARKS.md](TRADEMARKS.md)); the Phorepoc project has an exception. Commercial licences are available from the founder. Third-party parts keep their own licences ([NOTICE](NOTICE)).
