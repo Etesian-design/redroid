@@ -1,0 +1,50 @@
+From 4a943fcaf9bd45e891472f2478f33724c7b9d99e Mon Sep 17 00:00:00 2001
+From: b <b@b>
+Date: Wed, 4 Nov 2026 00:35:19 +0000
+Subject: [PATCH] redroid: never run the device shutdown teardown or reboot the
+ host kernel
+
+Change-Id: I14c7261faa0072f233bf3fefd29f378b40e138f3
+---
+ init/reboot.cpp       | 6 ++++++
+ init/reboot_utils.cpp | 7 ++-----
+ 2 files changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/init/reboot.cpp b/init/reboot.cpp
+index a1eecbf..ac0c7b1 100644
+--- a/init/reboot.cpp
++++ b/init/reboot.cpp
+@@ -830,6 +830,12 @@ static void DoReboot(unsigned int cmd, const std::string& reason,
+     Timer t;
+     LOG(INFO) << "Reboot start, reason: " << reason << ", reboot_target: " << reboot_target;
+ 
++    // redroid: in a container the mounts, /data's filesystem, zram, loop devices and the kernel all
++    // belong to the host. None of the teardown below is ours to do (EXT4_IOC_SHUTDOWN on /data once
++    // shut down the host's root filesystem): flush and stop the container.
++    sync();
++    RebootSystem(cmd, reboot_target, reason);
++
+     bool is_thermal_shutdown = cmd == ANDROID_RB_THERMOFF;
+ 
+     auto clean_shutdown_timeout = 0ms;
+diff --git a/init/reboot_utils.cpp b/init/reboot_utils.cpp
+index 5c402fe..db25404 100644
+--- a/init/reboot_utils.cpp
++++ b/init/reboot_utils.cpp
+@@ -104,11 +104,8 @@ void __attribute__((noreturn)) RebootSystem(unsigned int cmd, const std::string&
+                                             const std::string& reboot_reason) {
+     LOG(INFO) << "Reboot ending, jumping to kernel";
+ 
+-    if (!IsRebootCapable()) {
+-        // On systems where init does not have the capability of rebooting the
+-        // device, just exit cleanly.
+-        exit(0);
+-    }
++    // redroid: never ask the host kernel to reboot or power off; ending init ends the container.
++    exit(0);
+ 
+     switch (cmd) {
+         case ANDROID_RB_POWEROFF:
+-- 
+2.53.0
+
