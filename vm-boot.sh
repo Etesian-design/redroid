@@ -1,7 +1,7 @@
 #!/bin/bash
 # Runs INSIDE the throwaway test VM (see vm-test.sh): assembles the image from ~/img and boots it.
 set -e
-sudo mkdir -p /dev/binderfs; mountpoint -q /dev/binderfs || sudo mount -t binder binder /dev/binderfs
+sudo modprobe binder_linux; sudo mkdir -p /dev/binderfs; mountpoint -q /dev/binderfs || sudo mount -t binder binder /dev/binderfs
 cd ~/img; sudo mkdir -p /x/system /x/vendor /x/root; sudo umount /x/system /x/vendor 2>/dev/null || true
 sudo mount -o ro,loop system.img /x/system; sudo mount -o ro,loop vendor.img /x/vendor
 sudo install -m 750 first_stage_init /x/root/init

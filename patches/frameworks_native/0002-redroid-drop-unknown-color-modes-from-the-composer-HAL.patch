@@ -1,0 +1,35 @@
+From fd3957cea581f1365678ef9964effd1034873e4c Mon Sep 17 00:00:00 2001
+From: Ziyang Zhou <ziyang.zhou@outlook.com>
+Date: Wed, 4 Nov 2026 02:04:40 +0000
+Subject: [PATCH] redroid: drop color modes the composer HAL reports outside
+ the enum
+
+Change-Id: I20f514ffafacfa1e3aae9da6a6f0a27b6af00eed
+---
+ .../surfaceflinger/DisplayHardware/HidlComposerHal.cpp | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/services/surfaceflinger/DisplayHardware/HidlComposerHal.cpp b/services/surfaceflinger/DisplayHardware/HidlComposerHal.cpp
+index 5e69256..946d11f 100644
+--- a/services/surfaceflinger/DisplayHardware/HidlComposerHal.cpp
++++ b/services/surfaceflinger/DisplayHardware/HidlComposerHal.cpp
+@@ -450,6 +450,16 @@ Error HidlComposer::getColorModes(Display display, std::vector<ColorMode>* outMo
+         });
+     }
+ 
++    // redroid: the HWC1 adapter behind a composer 2.1 HAL can report values outside the enum, which
++    // isWideColorMode() then jumps on; keep only the modes ColorMode defines.
++    std::erase_if(*outModes, [](ColorMode mode) {
++        const auto v = static_cast<int32_t>(mode);
++        const bool known = v >= static_cast<int32_t>(ColorMode::NATIVE) &&
++                v <= static_cast<int32_t>(ColorMode::DISPLAY_BT2020);
++        if (!known) ALOGW("getColorModes: dropping unknown color mode %d", v);
++        return !known;
++    });
++
+     return error;
+ }
+ 
+-- 
+2.53.0
+
