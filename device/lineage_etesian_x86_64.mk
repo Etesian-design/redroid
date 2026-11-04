@@ -7,7 +7,7 @@ $(call inherit-product, device/redroid/redroid_64only.mk)
 REDROID_DISABLE_OMX := true
 $(call inherit-product, device/redroid/redroid.mk)
 $(call inherit-product, device/redroid/redroid_x86_64_only/device.mk)
-DEVICE_PACKAGE_OVERLAYS += device/redroid/overlay
+DEVICE_PACKAGE_OVERLAYS += device/redroid/overlay device/etesian/redroid/overlay
 PRODUCT_COPY_FILES += \
     device/redroid/mediacodec.policy.x86:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediacodec.policy
 $(call inherit-product, device/redroid-prebuilts/prebuilts_x86.mk)
