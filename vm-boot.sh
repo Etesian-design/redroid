@@ -1,6 +1,11 @@
 #!/bin/bash
 # Runs INSIDE the throwaway test VM (see vm-test.sh): assembles the image from ~/img and boots it.
 set -e
+# netd sets up its firewall and routing marks with legacy iptables: without these tables and MARK, the rule that marks
+# packets coming in on eth0 fails and no reply (adb on 5555) can be routed back.
+for m in iptable_filter iptable_mangle iptable_raw iptable_nat ip6table_filter ip6table_mangle ip6table_raw ip6table_nat \
+         xt_mark xt_connmark xt_owner xt_bpf xt_comment xt_state xt_socket xt_quota xt_length xt_limit xt_pkttype xt_policy xt_u32 xt_CT xt_NFLOG xt_IDLETIMER; do
+  sudo modprobe "$m" 2>/dev/null || echo "no kernel module $m"; done
 sudo modprobe binder_linux; sudo modprobe af_key; sudo mkdir -p /dev/binderfs; mountpoint -q /dev/binderfs || sudo mount -t binder binder /dev/binderfs
 cd ~/img; sudo mkdir -p /x/system /x/vendor /x/root; sudo umount /x/system /x/vendor 2>/dev/null || true
 sudo mount -o ro,loop system.img /x/system; sudo mount -o ro,loop vendor.img /x/vendor
