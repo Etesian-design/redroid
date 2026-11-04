@@ -1,0 +1,29 @@
+From 124c89642217062cc7f4a7dbb6aff0a177c4dbb7 Mon Sep 17 00:00:00 2001
+From: builder <builder@localhost>
+Date: Wed, 4 Nov 2026 01:25:41 +0000
+Subject: [PATCH] redroid: skip the TCP_ANDROID_L4S self test on a shared host
+ kernel
+
+Change-Id: I77579d2754b8c3ae0421d3b4ee1d935c9c7f6f56
+---
+ bpf/netd/BpfHandler.cpp | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/bpf/netd/BpfHandler.cpp b/bpf/netd/BpfHandler.cpp
+index 9b57548..f41423e 100644
+--- a/bpf/netd/BpfHandler.cpp
++++ b/bpf/netd/BpfHandler.cpp
+@@ -382,7 +382,9 @@ Result<void> BpfHandler::init(const char* cg2_path) {
+         unique_fd client(socket(AF_INET, SOCK_STREAM | SOCK_CLOEXEC, 0));
+         if (!client.ok()) return Error(errno) << "socket4tcp";
+ 
+-        if (isKernel64Bit() == isUserspace64bit()
++        // redroid: TCP_ANDROID_L4S is answered by netd's cgroup getsockopt program, which a shared host kernel
++        // (its own cgroup programs, a container cgroup namespace) refuses with EPERM; skip that part of the self test.
++        if (false && isKernel64Bit() == isUserspace64bit()
+             && isAtLeastKernelVersion(6, 1) && !isAtLeastKernelVersion(6, 18)) {
+             {
+                 bool b = false;
+-- 
+2.53.0
+
