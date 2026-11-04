@@ -1,0 +1,37 @@
+From a71d5a0fba7e7de5512abdc6bffefff6b7ad91d0 Mon Sep 17 00:00:00 2001
+From: builder <builder@localhost>
+Date: Wed, 4 Nov 2026 01:11:37 +0000
+Subject: [PATCH] redroid: the shared host kernel already has BPF programs and
+ maps
+
+Change-Id: I9f5009dffbc95d5b73855b605e730ebcc7e2a19b
+---
+ bpf/loader/NetBpfLoad.cpp | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/bpf/loader/NetBpfLoad.cpp b/bpf/loader/NetBpfLoad.cpp
+index 6e3a24a..c1d2b74 100644
+--- a/bpf/loader/NetBpfLoad.cpp
++++ b/bpf/loader/NetBpfLoad.cpp
+@@ -1784,14 +1784,14 @@ static int doLoad(char** argv, char * const envp[]) {
+         errno = 0;
+         uint32_t progId = bpfGetNextProgId(0);  // expect 0 with errno == ENOENT
+         if (progId || errno != ENOENT) {
+-            ALOGE("bpfGetNextProgId(zero) returned %u (errno %d)", progId, errno);
+-            return 32;
++            // redroid: the host kernel is shared and has its own programs already.
++            ALOGW("bpfGetNextProgId(zero) returned %u (errno %d): host programs, carrying on", progId, errno);
+         }
+         errno = 0;
+         uint32_t mapId = bpfGetNextMapId(0);  // expect 0 with errno == ENOENT
+         if (mapId || errno != ENOENT) {
+-            ALOGE("bpfGetNextMapId(zero) returned %u (errno %d)", mapId, errno);
+-            return 33;
++            // redroid: the host kernel is shared and has its own maps already.
++            ALOGW("bpfGetNextMapId(zero) returned %u (errno %d): host maps, carrying on", mapId, errno);
+         }
+     } else if (isAtLeastKernelVersion(4, 14)) {  // implies S through U QPR2
+         // bpfGetNext{Prog,Map}Id require 4.14+
+-- 
+2.53.0
+
