@@ -1,5 +1,5 @@
 From 8db890736cfa05521853ef77b0052fd8007909ea Mon Sep 17 00:00:00 2001
-From: builder <builder@localhost>
+From: Kyriakos <memphisx@gmail.com>
 Date: Tue, 3 Nov 2026 12:16:19 +0000
 Subject: [PATCH] redroid: fix booting (rebased on Android 17)
 

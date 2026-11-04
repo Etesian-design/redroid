@@ -1,5 +1,5 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: builder <builder@localhost>
+From: Kyriakos <memphisx@gmail.com>
 Date: Tue, 3 Nov 2026 12:40:21 +0000
 Subject: [PATCH] Android 17: AIDL drm clearkey and wifi services; composer 2.1
  impl is gone

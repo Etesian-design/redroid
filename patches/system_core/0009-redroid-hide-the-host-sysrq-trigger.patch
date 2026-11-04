@@ -1,5 +1,5 @@
 From 33e351c7e5df76e0e30b1d607cfec6db3c21c4c1 Mon Sep 17 00:00:00 2001
-From: b <b@b>
+From: Kyriakos <memphisx@gmail.com>
 Date: Tue, 3 Nov 2026 23:12:53 +0000
 Subject: [PATCH] redroid: hide the host sysrq trigger and leave the sysrq
  setting alone

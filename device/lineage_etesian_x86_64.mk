@@ -12,7 +12,8 @@ PRODUCT_COPY_FILES += \
     device/redroid/mediacodec.policy.x86:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediacodec.policy
 $(call inherit-product, device/redroid-prebuilts/prebuilts_x86.mk)
 
-# LineageOS, then Etesian
+# LineageOS, then Etesian. A container starts provisioned (overlay) and has no setup wizard.
+PRODUCT_NO_SETUPWIZARD := true
 $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 $(call inherit-product, vendor/etesian/etesian.mk)
 

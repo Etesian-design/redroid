@@ -1,5 +1,5 @@
 From 124c89642217062cc7f4a7dbb6aff0a177c4dbb7 Mon Sep 17 00:00:00 2001
-From: builder <builder@localhost>
+From: Kyriakos <memphisx@gmail.com>
 Date: Wed, 4 Nov 2026 01:25:41 +0000
 Subject: [PATCH] redroid: skip the TCP_ANDROID_L4S self test on a shared host
  kernel
