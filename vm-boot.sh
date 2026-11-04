@@ -15,4 +15,6 @@ for i in $(seq 60); do sleep 5
   s=$(sudo docker inspect -f '{{.State.Status}}' et); b=$(sudo docker exec et /system/bin/getprop sys.boot_completed 2>/dev/null || true)
   [ "$s" != running ] || [ "$b" = 1 ] && break; done
 echo "state=$s boot=$b t=$((i*5))s"
+# Cloud Companion's bridge needs adbd on TCP 5555 (2026-11-04: Lineage's userdebug left it off)
+sudo docker exec et /system/bin/getprop init.svc.adbd | grep -qx running && echo "adbd running" || echo "FAIL: adbd not running"
 sudo dmesg | grep -E 'reboot_on_failure|shutdown_command|failed|FAILED|E [A-Za-z]+:' | grep -v 'cgroup controller' | tail -25
