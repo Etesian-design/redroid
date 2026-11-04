@@ -1,0 +1,10 @@
+# A container's eth0 is its only network. Android turns on reverse-path filtering, and in a container the
+# reverse lookup for a peer on eth0 ends in netd's "unreachable" rule: ARP from the Docker network goes
+# unanswered and Cloud Companion's bridge gets "No route to host" on adb (TCP 5555).
+on boot
+    write /proc/sys/net/ipv4/conf/all/rp_filter 0
+    write /proc/sys/net/ipv4/conf/eth0/rp_filter 0
+
+on property:sys.boot_completed=1
+    write /proc/sys/net/ipv4/conf/all/rp_filter 0
+    write /proc/sys/net/ipv4/conf/eth0/rp_filter 0
