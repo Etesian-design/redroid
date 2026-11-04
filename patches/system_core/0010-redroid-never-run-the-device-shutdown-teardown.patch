@@ -1,5 +1,5 @@
 From 4a943fcaf9bd45e891472f2478f33724c7b9d99e Mon Sep 17 00:00:00 2001
-From: b <b@b>
+From: Kyriakos <memphisx@gmail.com>
 Date: Wed, 4 Nov 2026 00:35:19 +0000
 Subject: [PATCH] redroid: never run the device shutdown teardown or reboot the
  host kernel

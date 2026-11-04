@@ -1,5 +1,5 @@
 From de08d987a28f3ac39c6b62c6f2a5f0aaecfd3be0 Mon Sep 17 00:00:00 2001
-From: b <b@b>
+From: Kyriakos <memphisx@gmail.com>
 Date: Tue, 3 Nov 2026 18:11:34 +0000
 Subject: [PATCH] redroid: never write the host sysrq trigger
 
