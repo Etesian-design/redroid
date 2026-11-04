@@ -14,6 +14,8 @@ $(call inherit-product, device/redroid-prebuilts/prebuilts_x86.mk)
 
 # LineageOS, then Etesian. A container starts provisioned (overlay) and has no setup wizard.
 PRODUCT_NO_SETUPWIZARD := true
+# Cloud Companion's bridge drives the phone over adb on TCP 5555 as root: Lineage's userdebug would make it non-debuggable with adb off (persist.sys.usb.config=none).
+WITH_ADB_INSECURE := true
 $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 $(call inherit-product, vendor/etesian/etesian.mk)
 
