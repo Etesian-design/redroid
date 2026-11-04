@@ -14,7 +14,9 @@ Status: a spike. Nothing here has booted yet.
 - `builder/`: the build environment as a Docker image, so the build host needs only Docker.
 
 ## Host
-The `binder_linux` kernel module, loaded with `devices=binder,hwbinder,vndbinder` (the same as any Redroid).
+The `binder_linux` kernel module, loaded with `devices=binder,hwbinder,vndbinder` (the same as any Redroid), and `af_key`:
+Android 17's network statistics close a `PF_KEY` socket to make the kernel finish pending map updates (RCU), and the
+system server stops without it.
 
 ## Image and running it
 `make-image.sh <tree>` turns a finished build into `etesian-redroid:24.0`. Run it like Redroid:
