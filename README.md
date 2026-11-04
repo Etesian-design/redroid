@@ -31,6 +31,13 @@ other container. Docker refuses mounts inside `/proc`, so the image guards itsel
 reboot code away from it, and patch 0009 hides it behind `/dev/null` at the top of `init.rc`, before anything else can write
 to it (the system server's watchdog and `llkd` also can), and leaves the host's sysrq setting alone.
 
+## Testing
+Boot test images only inside a throwaway VM, never on a real host. A privileged Android container shares the host
+kernel: failed boots on a test machine once signalled every host process (sysrq) and once shut down the host's root
+filesystem (`EXT4_IOC_SHUTDOWN` on `/data`). Patches 0007, 0009 and 0010 stop both, but a new image is untested until it
+has booted in the VM. `vm-test.sh` copies a finished build into the VM (`~/vm`, QEMU/KVM in an unprivileged container
+with only `/dev/kvm`), assembles the image there, boots it and prints the boot state and init's errors.
+
 ## Licences
 Redroid's parts are Apache-2.0; `device/redroid-prebuilts` holds Mesa and other open-source binaries. No Nokia files: the
 optional `vendor/harmattan-n9` is never part of this build.
