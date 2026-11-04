@@ -1,0 +1,60 @@
+From a06047f204738a20e3e61f0562b30ab3bd526c3f Mon Sep 17 00:00:00 2001
+From: builder <builder@localhost>
+Date: Wed, 4 Nov 2026 01:36:10 +0000
+Subject: [PATCH] Android 17: allow the gralloc 2.0 mapper (libui
+ legacy_gralloc)
+
+---
+ redroid_arm64/BoardConfig.mk       | 3 +++
+ redroid_arm64_only/BoardConfig.mk  | 3 +++
+ redroid_x86_64/BoardConfig.mk      | 3 +++
+ redroid_x86_64_only/BoardConfig.mk | 3 +++
+ 4 files changed, 12 insertions(+)
+
+diff --git a/redroid_arm64/BoardConfig.mk b/redroid_arm64/BoardConfig.mk
+index de0f1ea..ca39cb1 100644
+--- a/redroid_arm64/BoardConfig.mk
++++ b/redroid_arm64/BoardConfig.mk
+@@ -20,3 +20,6 @@ BOARD_SYSTEMIMAGE_PARTITION_RESERVED_SIZE := 16777216
+ 
+ DEVICE_MANIFEST_FILE += device/redroid/manifest.xml
+ 
++
++# Android 17: keep the HIDL gralloc 2.0 mapper redroid ships (libui otherwise requires mapper 4 or newer)
++$(call soong_config_set_bool,libui,legacy_gralloc,true)
+diff --git a/redroid_arm64_only/BoardConfig.mk b/redroid_arm64_only/BoardConfig.mk
+index 21257a9..c1ad892 100644
+--- a/redroid_arm64_only/BoardConfig.mk
++++ b/redroid_arm64_only/BoardConfig.mk
+@@ -14,3 +14,6 @@ BOARD_SYSTEMIMAGE_PARTITION_RESERVED_SIZE := 16777216
+ 
+ DEVICE_MANIFEST_FILE += device/redroid/manifest.xml
+ 
++
++# Android 17: keep the HIDL gralloc 2.0 mapper redroid ships (libui otherwise requires mapper 4 or newer)
++$(call soong_config_set_bool,libui,legacy_gralloc,true)
+diff --git a/redroid_x86_64/BoardConfig.mk b/redroid_x86_64/BoardConfig.mk
+index d6fc67c..cee0c7d 100755
+--- a/redroid_x86_64/BoardConfig.mk
++++ b/redroid_x86_64/BoardConfig.mk
+@@ -26,3 +26,6 @@ BOARD_SYSTEMIMAGE_PARTITION_RESERVED_SIZE := 16777216
+ 
+ DEVICE_MANIFEST_FILE += device/redroid/manifest.xml
+ 
++
++# Android 17: keep the HIDL gralloc 2.0 mapper redroid ships (libui otherwise requires mapper 4 or newer)
++$(call soong_config_set_bool,libui,legacy_gralloc,true)
+diff --git a/redroid_x86_64_only/BoardConfig.mk b/redroid_x86_64_only/BoardConfig.mk
+index fa6252d..1d17529 100755
+--- a/redroid_x86_64_only/BoardConfig.mk
++++ b/redroid_x86_64_only/BoardConfig.mk
+@@ -17,3 +17,6 @@ BOARD_SYSTEMIMAGE_PARTITION_RESERVED_SIZE := 16777216
+ 
+ DEVICE_MANIFEST_FILE += device/redroid/manifest.xml
+ 
++
++# Android 17: keep the HIDL gralloc 2.0 mapper redroid ships (libui otherwise requires mapper 4 or newer)
++$(call soong_config_set_bool,libui,legacy_gralloc,true)
+-- 
+2.53.0
+
