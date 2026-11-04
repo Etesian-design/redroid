@@ -1,0 +1,27 @@
+From 8398ebdee4cb82df831e1dd060642b83c750bdaa Mon Sep 17 00:00:00 2001
+From: b <b@b>
+Date: Wed, 4 Nov 2026 01:20:04 +0000
+Subject: [PATCH] redroid: create /dev/block for apexd loop devices
+
+Change-Id: Ia9e447ae406223a15f1dc09abf7e5e30488d2691
+---
+ rootdir/init.rc | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/rootdir/init.rc b/rootdir/init.rc
+index e28926f..2e6bd3f 100644
+--- a/rootdir/init.rc
++++ b/rootdir/init.rc
+@@ -22,6 +22,9 @@ on early-init
+     # setting, and hide the trigger behind /dev/null in this container so nothing here (the system server's
+     # watchdog, llkd, init) can send sysrq to the host.
+     mount none /dev/null /proc/sysrq-trigger bind
++    # redroid: no ueventd cold boot in a container, so nothing makes /dev/block; apexd makes its loop device
++    # nodes there itself (Android 17 APEXes are no longer flattened).
++    mkdir /dev/block 0755 root root
+ 
+     # Android doesn't need kernel module autoloading, and it causes SELinux
+     # denials.  So disable it by setting modprobe to the empty string.  Note: to
+-- 
+2.53.0
+
