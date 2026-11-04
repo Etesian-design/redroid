@@ -4,7 +4,9 @@
 set -e
 W="$(mkdir -p "$1" && cd "$1" && pwd)"; ETESIAN="$(cd "${2:?usage: build.sh <work dir> <vendor/etesian>}" && pwd)"; HERE="$(cd "$(dirname "$0")" && pwd)"
 docker build -q -t etesian-builder "$HERE/builder" >/dev/null
-run() { docker run --rm --cpus "${CPUS:-12}" --memory "${MEM:-44g}" -e USE_CCACHE=1 -e CCACHE_DIR=/ccache -v "$W/ccache:/ccache" -v "$W/src:/src" -v "$HERE:/etesian-redroid:ro" etesian-builder bash -c "$1"; }
+# ccache: Android only uses it when CCACHE_EXEC names the binary (USE_CCACHE alone does nothing);
+# 2026-11-04 every build until then compiled all C/C++ from scratch. 60 GB, in $W/ccache/ccache.conf.
+run() { docker run --rm --cpus "${CPUS:-12}" --memory "${MEM:-44g}" -e USE_CCACHE=1 -e CCACHE_EXEC=/usr/bin/ccache -e CCACHE_DIR=/ccache -v "$W/ccache:/ccache" -v "$W/src:/src" -v "$HERE:/etesian-redroid:ro" etesian-builder bash -c "$1"; }
 mkdir -p "$W/src/.repo/local_manifests" "$W/ccache"
 if [ ! -d "$W/src/frameworks" ]; then
     cp "$HERE/manifest/etesian-redroid.xml" "$W/src/.repo/local_manifests/"
