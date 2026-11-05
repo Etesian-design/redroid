@@ -1,8 +1,8 @@
 # Etesian in a container
 
 Etesian (LineageOS with the Etesian experience) as a Docker image that runs like [Redroid](https://github.com/remote-android/redroid-doc):
-one container, no virtual machine. Built for the latest LineageOS only. [Cloud Companion](https://github.com/Etesian-design/cloud-companion)
-uses it for its Android page.
+one container, no virtual machine. Built for the latest LineageOS only. [Cloud Companion](https://github.com/Phorepoc/cloud-companion)
+uses it for its Android page; Cloud Companion is a Phorepoc project that shares Etesian's look.
 
 Status: a spike. Nothing here has booted yet.
 
@@ -44,5 +44,6 @@ with only `/dev/kvm`), assembles the image there, boots it and prints the boot s
 
 Etesian, founded by Kyriakos Bompotis. Licensed under the GNU Affero General Public License, version 3 only (AGPL-3.0-only, [LICENSE](LICENSE)), with additional terms under its section 7 ([ADDITIONAL-TERMS.md](ADDITIONAL-TERMS.md)): the attribution "Etesian, founded by Kyriakos Bompotis" must be kept, also where a work based on it shows legal notices; no rights are granted to the Etesian names and logos ([TRADEMARKS.md](TRADEMARKS.md)); the Phorepoc project has an exception. Commercial licences are available from the founder. Third-party parts keep their own licences ([NOTICE](NOTICE)).
 
-Redroid's parts are Apache-2.0; `device/redroid-prebuilts` holds Mesa and other open-source binaries. No Nokia files: the
-optional `vendor/harmattan-n9` is never part of this build.
+Redroid's parts are Apache-2.0; `device/redroid-prebuilts` holds Mesa and other open-source binaries.
+
+Contains no Nokia files: no Nokia Pure fonts, icons, wallpapers or sounds. Etesian uses its own.
