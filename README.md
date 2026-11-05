@@ -1,8 +1,8 @@
 # Etesian in a container
 
 Etesian (LineageOS with the Etesian experience) as a Docker image that runs like [Redroid](https://github.com/remote-android/redroid-doc):
-one container, no virtual machine. Built for the latest LineageOS only. [Cloud Companion](https://github.com/Etesian-design/cloud-companion)
-uses it for its Android page.
+one container, no virtual machine. Built for the latest LineageOS only. [Cloud Companion](https://github.com/Phorepoc/cloud-companion)
+uses it for its Android page; Cloud Companion is a Phorepoc project that shares Etesian's look.
 
 Status: a spike. Nothing here has booted yet.
 
@@ -41,5 +41,6 @@ has booted in the VM. `vm-test.sh` copies a finished build into the VM (`~/vm`, 
 with only `/dev/kvm`), assembles the image there, boots it and prints the boot state and init's errors.
 
 ## Licences
-Redroid's parts are Apache-2.0; `device/redroid-prebuilts` holds Mesa and other open-source binaries. No Nokia files: the
-optional `vendor/harmattan-n9` is never part of this build.
+Redroid's parts are Apache-2.0; `device/redroid-prebuilts` holds Mesa and other open-source binaries.
+
+Contains no Nokia files: no Nokia Pure fonts, icons, wallpapers or sounds. Etesian uses its own.
