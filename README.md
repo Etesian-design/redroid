@@ -40,6 +40,11 @@ filesystem (`EXT4_IOC_SHUTDOWN` on `/data`). Patches 0007, 0009 and 0010 stop bo
 has booted in the VM. `vm-test.sh` copies a finished build into the VM (`~/vm`, QEMU/KVM in an unprivileged container
 with only `/dev/kvm`), assembles the image there, boots it and prints the boot state and init's errors.
 
+## Releases
+Each push to master that warrants a release (Conventional Commits, checked by commitlint in CI and by the git hooks after
+`npm install`) is built with the release keys, boot-tested in the VM and published as `ghcr.io/etesian-design/redroid:<version>`
+and `:latest` (`.github/workflows/release.yml`, `ci/release.sh`), on the self-hosted runner that builds the ROM.
+
 ## Licences
 
 Etesian, founded by Kyriakos Bompotis. Licensed under the GNU Affero General Public License, version 3 only (AGPL-3.0-only, [LICENSE](LICENSE)), with additional terms under its section 7 ([ADDITIONAL-TERMS.md](ADDITIONAL-TERMS.md)): the attribution "Etesian, founded by Kyriakos Bompotis" must be kept, also where a work based on it shows legal notices; no rights are granted to the Etesian names and logos ([TRADEMARKS.md](TRADEMARKS.md)); the Phorepoc project has an exception. Commercial licences are available from the founder. Third-party parts keep their own licences ([NOTICE](NOTICE)).
