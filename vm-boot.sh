@@ -21,5 +21,7 @@ for i in $(seq 60); do sleep 5
   [ "$s" != running ] || [ "$b" = 1 ] && break; done
 echo "state=$s boot=$b t=$((i*5))s"
 # Cloud Companion's bridge needs adbd on TCP 5555 (2026-11-04: Lineage's userdebug left it off)
-sudo docker exec et /system/bin/getprop init.svc.adbd | grep -qx running && echo "adbd running" || echo "FAIL: adbd not running"
-sudo dmesg | grep -E 'reboot_on_failure|shutdown_command|failed|FAILED|E [A-Za-z]+:' | grep -v 'cgroup controller' | tail -25
+ok=1; [ "$b" = 1 ] || { echo "FAIL: did not finish booting"; ok=; }
+sudo docker exec et /system/bin/getprop init.svc.adbd | grep -qx running && echo "adbd running" || { echo "FAIL: adbd not running"; ok=; }
+sudo dmesg | grep -E 'reboot_on_failure|shutdown_command|failed|FAILED|E [A-Za-z]+:' | grep -v 'cgroup controller' | tail -25 || true
+[ -n "$ok" ]   # the exit status the release workflow goes by

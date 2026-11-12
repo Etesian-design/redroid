@@ -40,6 +40,11 @@ filesystem (`EXT4_IOC_SHUTDOWN` on `/data`). Patches 0007, 0009 and 0010 stop bo
 has booted in the VM. `vm-test.sh` copies a finished build into the VM (`~/vm`, QEMU/KVM in an unprivileged container
 with only `/dev/kvm`), assembles the image there, boots it and prints the boot state and init's errors.
 
+## Releases
+Each push to master that warrants a release (Conventional Commits, checked by commitlint in CI and by the git hooks after
+`npm install`) is built with the release keys, boot-tested in the VM and published as `ghcr.io/etesian-design/redroid:<version>`
+and `:latest` (`.github/workflows/release.yml`, `ci/release.sh`), on the self-hosted runner that builds the ROM.
+
 ## Licences
 Redroid's parts are Apache-2.0; `device/redroid-prebuilts` holds Mesa and other open-source binaries.
 
