@@ -1,6 +1,8 @@
 #!/bin/bash
 # Runs INSIDE the throwaway test VM (see vm-test.sh): assembles the image from ~/img and boots it.
 set -e
+# binder_linux and some netfilter modules are in linux-modules-extra, which a kernel update in the VM leaves out.
+modinfo binder_linux >/dev/null 2>&1 || sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq -y "linux-modules-extra-$(uname -r)" >/dev/null
 # netd sets up its firewall and routing marks with legacy iptables: without these tables and MARK, the rule that marks
 # packets coming in on eth0 fails and no reply (adb on 5555) can be routed back.
 for m in iptable_filter iptable_mangle iptable_raw iptable_nat ip6table_filter ip6table_mangle ip6table_raw ip6table_nat \
