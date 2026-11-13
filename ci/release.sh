@@ -6,7 +6,7 @@
 # Leaves the image as etesian-redroid:<version>; the workflow pushes it.
 #
 # ${CI_DIR}/redroid/src is the LineageOS tree (repo) kept between runs, ${CI_DIR}/redroid/ccache its compiler cache.
-# The release keys (${CI_DIR}/keys/etesian-keys.tar.gpg) are unpacked into memory at vendor/lineage-priv/keys for the build,
+# The release keys (${CI_DIR}/keys/etesian-keys.tar.gpg) are unpacked into memory under vendor/lineage-priv for the build,
 # where LineageOS looks for its own (keys.mk), and go with the container.
 set -euo pipefail
 VERSION="${1:?usage: release.sh <version> <vendor/etesian>, the passphrase on stdin}"
@@ -30,16 +30,20 @@ if [ "$(docker inspect -f '{{.State.Running}}' etesian-vm 2>/dev/null)" = true ]
 fi
 
 printf '%s\n' "${PASS:-}" | docker run --rm -i \
-    --tmpfs /src/vendor/lineage-priv/keys:size=64m,mode=700,uid=1000,gid=1000 \
+    --tmpfs /src/vendor/lineage-priv:size=64m,mode=700,uid=1000,gid=1000 \
     -e USE_CCACHE=1 -e CCACHE_EXEC=/usr/bin/ccache -e CCACHE_DIR=/ccache -e BUILD_ONLY="${BUILD_ONLY:-}" \
     -v "$W/ccache:/ccache" -v "$W/src:/src" -v "$HERE:/etesian-redroid:ro" -v "$ETESIAN:/etesian:ro" -v "$KEYS:/keys.tar.gpg:ro" \
     etesian-builder bash -eo pipefail -c '
 IFS= read -r PASS || true
 if [ -z "$BUILD_ONLY" ]; then
-    printf %s "$PASS" | gpg --batch --quiet --pinentry-mode loopback --passphrase-fd 0 -d /keys.tar.gpg | tar -x -C /src/vendor/lineage-priv/keys
+    P=/src/vendor/lineage-priv; mkdir $P/new $P/keys
+    printf %s "$PASS" | gpg --batch --quiet --pinentry-mode loopback --passphrase-fd 0 -d /keys.tar.gpg | tar -x -C $P/new
+    # The folder is named after the keys: other keys, another path, so every app is signed again. At one fixed path an
+    # incremental build re-signs only what it rebuilds, and apps sharing a user id end up with different keys.
+    K=keys-$(sha256sum $P/new/releasekey.x509.pem | cut -c1-12); mv $P/new $P/$K
     # userdebug: the SELinux app keys (keys.conf) name the release key testkey
-    for f in x509.pem pk8; do cp /src/vendor/lineage-priv/keys/releasekey.$f /src/vendor/lineage-priv/keys/testkey.$f; done
-    echo "PRODUCT_DEFAULT_DEV_CERTIFICATE := vendor/lineage-priv/keys/releasekey" > /src/vendor/lineage-priv/keys/keys.mk
+    for f in x509.pem pk8; do cp $P/$K/releasekey.$f $P/$K/testkey.$f; done
+    echo "PRODUCT_DEFAULT_DEV_CERTIFICATE := vendor/lineage-priv/$K/releasekey" > $P/keys/keys.mk
 fi
 unset PASS
 cd /src
