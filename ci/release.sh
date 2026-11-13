@@ -23,11 +23,9 @@ fi
 mkdir -p "$W/ccache"
 docker build -q -t etesian-builder "$HERE/builder" >/dev/null
 
-# The build needs most of the machine's memory: the test VM is stopped for it and started again after, whatever the outcome.
-vm_was_up=
-if [ "$(docker inspect -f '{{.State.Running}}' etesian-vm 2>/dev/null)" = true ]; then
-    docker stop -t 120 etesian-vm >/dev/null && vm_was_up=1 && trap 'docker start etesian-vm >/dev/null' EXIT
-fi
+# The build needs most of the machine's memory: the test VM is stopped for it and started again after, whatever the outcome (and always for the boot test).
+docker inspect etesian-vm >/dev/null || { echo "no etesian-vm container: no boot test possible" >&2; exit 1; }
+docker stop -t 120 etesian-vm >/dev/null; trap 'docker start etesian-vm >/dev/null' EXIT
 
 printf '%s\n' "${PASS:-}" | docker run --rm -i \
     --tmpfs /src/vendor/lineage-priv:size=64m,mode=700,uid=1000,gid=1000 \
@@ -67,7 +65,6 @@ m -j$(nproc)
 "$HERE/make-image.sh" "$W/src" "$TAG"
 
 # Boot test: only inside the VM, never on this host (README, Testing).
-[ -n "$vm_was_up" ] || { echo "etesian-vm was not running: no boot test" >&2; exit 1; }
 docker start etesian-vm >/dev/null; trap - EXIT
 VM_DIR="$(dirname "$CI")/vm" "$HERE/vm-test.sh" "$W/src"
 echo "built and boot-tested $TAG"
