@@ -1,10 +1,13 @@
 # Etesian in a container
 
 Etesian (LineageOS with the Etesian experience) as a Docker image that runs like [Redroid](https://github.com/remote-android/redroid-doc):
-one container, no virtual machine. Built for the latest LineageOS only. [Cloud Companion](https://github.com/Phorepoc/cloud-companion)
-uses it for its Android page; Cloud Companion is a Phorepoc project that shares Etesian's look.
+one container, no virtual machine. Built for the latest LineageOS only (LineageOS 24).
 
-Status: a spike. Nothing here has booted yet.
+Released as `ghcr.io/etesian-design/redroid` (see Releases): every release is built with the release keys and boots in the
+test VM before it is published.
+
+[Cloud Companion](https://github.com/Phorepoc/cloud-companion) (a Phorepoc project that shares Etesian's look) runs Redroid
+images for its Android page, so it can run this one in their place; that pairing has not been tested yet.
 
 ## Layout
 - `manifest/etesian-redroid.xml`: a local manifest that adds Redroid's container device to a LineageOS tree.
