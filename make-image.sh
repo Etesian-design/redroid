@@ -1,4 +1,5 @@
 #!/bin/bash
+# SPDX-License-Identifier: AGPL-3.0-only
 # Turns a finished build into the Docker image. Usage: make-image.sh <source tree> [tag]
 # Needs Docker only: the images are loop-mounted inside a throwaway privileged container.
 # Android 17's /system/bin/init is second stage only; the first stage (normally in the boot

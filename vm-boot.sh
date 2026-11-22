@@ -1,4 +1,5 @@
 #!/bin/bash
+# SPDX-License-Identifier: AGPL-3.0-only
 # Runs INSIDE the throwaway test VM (see vm-test.sh): assembles the image from ~/img and boots it.
 set -e
 # binder_linux and some netfilter modules are in linux-modules-extra, which a kernel update in the VM leaves out.

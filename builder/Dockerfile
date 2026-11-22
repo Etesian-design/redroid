@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-only
 # The build environment: LineageOS's build dependencies and repo, so the host needs only Docker.
 FROM ubuntu:24.04
 ENV DEBIAN_FRONTEND=noninteractive

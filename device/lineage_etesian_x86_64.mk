@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-only
 # x86_64 only, and no ARM translation: only apps with x86_64 code install (as Cloud Companion's image does today).
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base.mk)

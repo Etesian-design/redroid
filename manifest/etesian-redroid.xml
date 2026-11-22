@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: AGPL-3.0-only -->
 <!-- Local manifest for an Etesian LineageOS tree: the container (Redroid-style) device and its parts. -->
 <manifest>
   <remote name="redroid" fetch="https://github.com/remote-android/" />

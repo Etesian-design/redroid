@@ -1,4 +1,5 @@
 #!/bin/bash
+# SPDX-License-Identifier: AGPL-3.0-only
 # Sets up and builds the container image on a Docker host. Usage: ./build.sh <work dir> <vendor/etesian checkout>
 # The tree, ccache and logs live in <work dir>; the build runs in the builder image (builder/), capped so the host stays usable.
 set -e

@@ -1,4 +1,5 @@
 #!/bin/bash
+# SPDX-License-Identifier: AGPL-3.0-only
 # Boots a finished build ONLY inside the throwaway VM (never on this host): copies the images and vm-boot.sh in and runs it.
 # Usage: vm-test.sh [source tree]. Fails unless Android finishes booting with adbd up.
 # ssh runs in a container on the host's network, so this works from the CI runner's container as from a shell.

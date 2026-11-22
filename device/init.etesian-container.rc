@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-only
 # A container's eth0 is its only network. Android turns on reverse-path filtering, and in a container the
 # reverse lookup for a peer on eth0 ends in netd's "unreachable" rule: ARP from the Docker network goes
 # unanswered and Cloud Companion's bridge gets "No route to host" on adb (TCP 5555).
