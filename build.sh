@@ -9,10 +9,12 @@ docker build -q -t etesian-builder "$HERE/builder" >/dev/null
 # 2026-11-04 every build until then compiled all C/C++ from scratch. 60 GB, in $W/ccache/ccache.conf.
 run() { docker run --rm --cpus "${CPUS:-12}" --memory "${MEM:-44g}" -e USE_CCACHE=1 -e CCACHE_EXEC=/usr/bin/ccache -e CCACHE_DIR=/ccache -v "$W/ccache:/ccache" -v "$W/src:/src" -v "$HERE:/etesian-redroid:ro" etesian-builder bash -c "$1"; }
 mkdir -p "$W/src/.repo/local_manifests" "$W/ccache"
+"$ETESIAN/meeye/fetch.sh"   # the icon pack, pinned and checksummed (never committed)
 if [ ! -d "$W/src/frameworks" ]; then
     cp "$HERE/manifest/etesian-redroid.xml" "$W/src/.repo/local_manifests/"
+    cp "$ETESIAN/manifest/etesian.xml" "$W/src/.repo/local_manifests/"   # Glance, built from its own repo
     run "repo init -q -u https://github.com/LineageOS/android.git -b lineage-24.0 --git-lfs --depth=1 && repo sync -c -j8 --no-tags --no-clone-bundle --optimized-fetch"
-    rsync -a --exclude .git --exclude n9-files "$ETESIAN/" "$W/src/vendor/etesian/"     # never the Nokia reference files
+    rsync -a -O --exclude .git --exclude n9-files "$ETESIAN/" "$W/src/vendor/etesian/"     # never the Nokia reference files
     mkdir -p "$W/src/device/etesian" && cp -r "$HERE/device" "$W/src/device/etesian/redroid"
     run "/etesian-redroid/patches/apply.sh /src && bash /src/vendor/etesian/patches/apply.sh"
 fi

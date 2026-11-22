@@ -21,6 +21,9 @@ if [ -z "${BUILD_ONLY:-}" ]; then
     [ -n "$PASS" ] || { echo "no passphrase on stdin" >&2; exit 1; }
 fi
 mkdir -p "$W/ccache"
+# Meeye, the launcher's default icon pack, is never committed (third-party): fetched here, pinned and checksummed, as the ROM's
+# release does (etesian.mk leaves it out when it is missing).
+"$ETESIAN/meeye/fetch.sh"
 docker build -q -t etesian-builder "$HERE/builder" >/dev/null
 
 # The build needs most of the machine's memory: the test VM is stopped for it and started again after, whatever the outcome (and always for the boot test).
@@ -49,16 +52,24 @@ ccache -M 60G >/dev/null
 # Upstream, then ours. The container patches are commits (git am), the Etesian patches uncommitted changes: both are undone
 # first, and repo sync -d puts every project back on its manifest revision.
 cp /etesian-redroid/manifest/etesian-redroid.xml .repo/local_manifests/
+# The Etesian apps in their own repos (Glance), fetched and built from source with the ROM (etesian.mk always lists them).
+cp /etesian/manifest/etesian.xml .repo/local_manifests/etesian.xml
 repo forall -c "git am --abort 2>/dev/null; git reset -q --hard && git clean -fdq"
 repo sync -d -c -j8 --no-tags --no-clone-bundle --optimized-fetch --force-sync
 # Never the N9 reference files or old snapshots. Etesian Mail is built outside the ROM: the copy already in the tree stays.
-rsync -a --delete --exclude .git --exclude node_modules --exclude /n9-files --exclude /backups --exclude /notes --exclude /local --exclude /release \
+# -O: folders get the time of the copy, so Soong lists a new folder (a kept old time hid it from its file globs).
+rsync -a -O --delete --exclude .git --exclude node_modules --exclude /n9-files --exclude /backups --exclude /notes --exclude /local --exclude /release \
     --filter "P /mail/EtesianMail.apk" --filter "P /mail/Android.bp" /etesian/ vendor/etesian/
 mkdir -p device/etesian && rsync -a --delete /etesian-redroid/device/ device/etesian/redroid/
 /etesian-redroid/patches/apply.sh /src
 bash vendor/etesian/patches/apply.sh
 source build/envsetup.sh >/dev/null
 lunch lineage_etesian_x86_64-cp2a-userdebug >/dev/null
+# LineageOS copies TARGET_BOOTANIMATION without tracking it as an input: drop the copy so a changed boot animation is picked up.
+rm -f out/soong/.intermediates/vendor/lineage/bootanimation/gen-bootanimation.zip/gen/bootanimation.zip \
+      out/soong/.intermediates/vendor/lineage/bootanimation/bootanimation.zip/android_common/bootanimation.zip
+# A module built on its own (m <app>) stays installed in out/ and would ship: only what the product lists goes in.
+m installclean >/dev/null
 m -j$(nproc)
 '
 
